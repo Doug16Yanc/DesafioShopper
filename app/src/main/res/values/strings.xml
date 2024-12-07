@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">DesafioShopper</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="title_activity_intro">IntroActivity</string>
+    <string name="intro_title">Transporte particular instantâneo</string>
+    <string name="sub_title">Explore um universo de possibilidades para sua mobilidade
+                            por meio de nossos serviços de transporte particular urbano,
+                            ofertando confiança, conforto, segurança e velocidade.
+    </string>
+    <string name="vamos">Vamos iniciar</string>
+</resources>
