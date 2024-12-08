@@ -7,5 +7,11 @@
                             por meio de nossos serviços de transporte particular urbano,
                             ofertando confiança, conforto, segurança e velocidade.
     </string>
-    <string name="vamos">Vamos iniciar</string>
+    <string name="go">Vamos iniciar</string>
+    <string name="app">RideMobi</string>
+    <string name="introduction">Aplicativo ideal para economizar e trafegar</string>
+    <string name="user_id">Id do usuário</string>
+    <string name="origin">Origem</string>
+    <string name="destination">Destino</string>
+    <string name="calculate">Estimar valor da viagem</string>
 </resources>
