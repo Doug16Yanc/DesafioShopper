@@ -122,7 +122,7 @@ fun IntroScreen(onClick : () -> Unit = {}) {
 
         OutlinedTextField(
             value = userId.value,
-            onValueChange = { userId.value = it },
+            onValueChange = { origin.value = it },
             label = {
                 Text(
                     text = stringResource(R.string.origin),
@@ -147,7 +147,7 @@ fun IntroScreen(onClick : () -> Unit = {}) {
         )
         OutlinedTextField(
             value = userId.value,
-            onValueChange = { userId.value = it },
+            onValueChange = { destination.value = it },
             label = {
                 Text(
                     text = stringResource(R.string.destination),
@@ -193,3 +193,4 @@ fun IntroScreen(onClick : () -> Unit = {}) {
         }
     }
 }
+
