@@ -14,4 +14,8 @@
     <string name="origin">Origem</string>
     <string name="destination">Destino</string>
     <string name="calculate">Estimar valor da viagem</string>
+    <string name="title_activity_driver">DriverActivity</string>
+    <string name="title_activity_travel">TravelActivity</string>
+    <string name="travel_detail">Detalhe de viagem</string>
+    <string name="driver_detail">Detalhe de motorista</string>
 </resources>

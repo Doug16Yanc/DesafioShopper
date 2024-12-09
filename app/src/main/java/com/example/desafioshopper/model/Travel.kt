@@ -11,7 +11,7 @@ data class Travel(
     val origin : String? = "",
     val destination : String? = "",
     val distance : Double? = 0.0,
-    val time : Double? = 0.0,
+    val duration : Double? = 0.0,
     val value : Double? = 0.0
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -30,7 +30,7 @@ data class Travel(
         parcel.writeString(origin)
         parcel.writeString(destination)
         parcel.writeValue(distance)
-        parcel.writeValue(time)
+        parcel.writeValue(duration)
         parcel.writeValue(value)
     }
 

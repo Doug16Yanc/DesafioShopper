@@ -9,21 +9,8 @@ import java.time.LocalDateTime
 
 interface ApiService {
     @GET("travels")
-    fun getTravels(
-        @Query("dateTime") dateTime : LocalDateTime,
-        @Query("name") name : String,
-        @Query("origin") origin : String,
-        @Query("destination") destination : String,
-        @Query("distance") distance : Double,
-        @Query("value") value : Double
-    ) : Call<List<Travel>>
+   suspend fun getTravels() : List<Travel>
 
     @GET("drivers")
-    fun getDrivers(
-        @Query("name") name : String,
-        @Query("description") description : String,
-        @Query("vehicle") vehicle : String,
-        @Query("rate") rate : Double,
-        @Query("value") value : Double
-    ) : Call<List<Driver>>
+    suspend fun getDrivers() : List<Driver>
 }
