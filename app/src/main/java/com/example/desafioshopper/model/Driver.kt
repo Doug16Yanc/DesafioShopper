@@ -5,26 +5,28 @@ import android.os.Parcelable
 import java.time.LocalDateTime
 
 data class Driver(
+    val id : Int? = 0,
     val name : String? = "",
     val description : String? = "",
     val vehicle : String? = "",
-    val rate : Double? = 0.0,
+    val review : Review?,
     val value : Double? = 0.0
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readValue(Double::class.java.classLoader) as? Double,
+        parcel.readParcelable(Review::class.java.classLoader),
         parcel.readValue(Double::class.java.classLoader) as? Double
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeValue(id)
         parcel.writeString(name)
         parcel.writeString(description)
         parcel.writeString(vehicle)
-        parcel.writeValue(rate)
+        parcel.writeParcelable(review, flags)
         parcel.writeValue(value)
     }
 
@@ -41,5 +43,4 @@ data class Driver(
             return arrayOfNulls(size)
         }
     }
-
 }

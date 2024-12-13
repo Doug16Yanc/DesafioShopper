@@ -16,6 +16,9 @@
     <string name="calculate">Estimar valor da viagem</string>
     <string name="title_activity_driver">DriverActivity</string>
     <string name="title_activity_travel">TravelActivity</string>
+    <string name="details">Motoristas disponíveis</string>
+    <string name="travels">Minhas viagens</string>
     <string name="travel_detail">Detalhe de viagem</string>
     <string name="driver_detail">Detalhe de motorista</string>
+    <string name="choose_driver">Escolher</string>
 </resources>

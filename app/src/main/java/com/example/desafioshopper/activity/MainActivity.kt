@@ -55,7 +55,7 @@ class MainActivity : BaseActivity() {
 @Preview
 fun MainScreen(onClick : () -> Unit = {}) {
     Column(modifier = Modifier.fillMaxSize()
-        .padding(top = 20.dp)
+        .padding(top = 2.dp)
         .verticalScroll(rememberScrollState())
         .background(Color.White),
         verticalArrangement = Arrangement.Center) {

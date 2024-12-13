@@ -1,41 +1,24 @@
 package com.example.desafioshopper.activity
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import android.widget.Toast
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
+import androidx.activity.viewModels
+import androidx.annotation.RequiresExtension
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.contentColorFor
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,60 +26,71 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.getDisplayOrDefault
+import androidx.core.content.ContextCompat.startActivity
+import coil.compose.AsyncImage
 import com.example.desafioshopper.R
-import com.example.desafioshopper.activity.ui.theme.DesafioShopperTheme
+import com.example.desafioshopper.viewModel.TravelViewModel
 
 class IntroActivity : BaseActivity() {
+    private val viewModel: TravelViewModel by viewModels()
+
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent{ IntroScreen(onClick = {
-        })}
+        setContent {
+            IntroScreen(viewModel = viewModel)
+        }
     }
 }
 
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview
-fun IntroScreen(onClick : () -> Unit = {}) {
+fun IntroScreen(viewModel: TravelViewModel) {
     val scrollState = rememberScrollState()
-    val userId = remember { mutableStateOf("") }
-    val origin = remember { mutableStateOf("")}
+    val customer_id = remember { mutableStateOf("") }
+    var origin = remember { mutableStateOf("") }
     val destination = remember { mutableStateOf("") }
+    val travelResponse by viewModel.travelResponse
+    val context = LocalContext.current
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(top = 2.dp)
-        .background(Color.White)
-        .verticalScroll(scrollState)) {
-        Text(text = stringResource(R.string.app),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .fillMaxWidth()
+            .padding(2.dp)
+            .background(Color.White)
+            .verticalScroll(scrollState)
+    ) {
+        Text(
+            text = stringResource(R.string.app),
             fontSize = 50.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily(Font(R.font.comfortaa)),
             color = colorResource(id = R.color.verde),
             modifier = Modifier
-                .padding(top = 200.dp)
+                .padding(top = 80.dp)
                 .fillMaxWidth(),
             textAlign = TextAlign.Center
         )
-        Text(text = stringResource(R.string.introduction),
+        Text(
+            text = stringResource(R.string.introduction),
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily(Font(R.font.comfortaa)),
             color = Color.DarkGray,
             modifier = Modifier
                 .padding(top = 5.dp)
-                .fillMaxSize(),
+                .fillMaxWidth(),
             textAlign = TextAlign.Center
         )
-
         OutlinedTextField(
-            value = userId.value,
-            onValueChange = { userId.value = it },
+            value = customer_id.value,
+            onValueChange = { customer_id.value = it },
             label = {
                 Text(
                     text = stringResource(R.string.user_id),
@@ -121,7 +115,7 @@ fun IntroScreen(onClick : () -> Unit = {}) {
         )
 
         OutlinedTextField(
-            value = userId.value,
+            value = origin.value,
             onValueChange = { origin.value = it },
             label = {
                 Text(
@@ -146,7 +140,7 @@ fun IntroScreen(onClick : () -> Unit = {}) {
             }
         )
         OutlinedTextField(
-            value = userId.value,
+            value = destination.value,
             onValueChange = { destination.value = it },
             label = {
                 Text(
@@ -171,26 +165,81 @@ fun IntroScreen(onClick : () -> Unit = {}) {
             }
         )
 
-        Spacer(modifier = Modifier.padding(top = 15.dp))
+        Spacer(modifier = Modifier.height(15.dp))
 
-        Button(onClick = {onClick()},
-            modifier = Modifier.padding(horizontal = 30.dp,
-                vertical = 10.dp)
-                .fillMaxSize()
-                .width(160.dp)
+        Button(
+            onClick = {
+                if (customer_id.value.isBlank() || origin.value.isBlank() || destination.value.isBlank()) {
+                    Toast.makeText(context, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
+                }
+                else if (origin.value == destination.value) {
+                    Toast.makeText(context, "A origem não pode ser igual ao destino.", Toast.LENGTH_SHORT).show()
+                } else {
+                    viewModel.getRideEstimate(customer_id.value, origin.value, destination.value)
+                }
+            },
+            modifier = Modifier
+                .padding(start = 32.dp)
+                .width(320.dp)
                 .height(60.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(R.color.verde)
             ),
             shape = RoundedCornerShape(10.dp)
         ) {
-            Text(text = stringResource(R.string.calculate),
+            Text(
+                text = stringResource(R.string.calculate),
                 fontSize = 20.sp,
                 fontFamily = FontFamily(Font(R.font.comfortaa)),
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
         }
-    }
-}
 
+        Spacer(modifier = Modifier.height(20.dp))
+
+        travelResponse?.let { response ->
+            val driverOptions = response.options
+
+
+            if (driverOptions.isNotEmpty()) {
+
+                val mapUrl = "https://maps.googleapis.com/maps/api/staticmap" +
+                    "?size=600x300" +
+                    "&markers=color:green|label:A|${origin.value}" +
+                    "&markers=color:red|label:B|${destination.value}" +
+                    "&path=color:blue|weight:5|${origin.value}|${destination.value}" +
+                    "&key="
+
+                AsyncImage(
+                    model = mapUrl,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    contentScale = ContentScale.Crop
+                )
+                val intent = Intent(context, DriverActivity::class.java).apply {
+                    putExtra("customer_id", customer_id.value)
+                    putExtra("origin", origin.value)
+                    putExtra("destination", destination.value)
+                    putExtra("distance", response.distance)
+                    putExtra("duration", response.duration)
+                    putExtra("driver_options", ArrayList(driverOptions))
+                    putExtra("value", response.value)
+                    }
+                context.startActivity(intent)
+            } else {
+                Toast.makeText(LocalContext.current, "Nenhum motorista disponível", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+
+
+
+
+    }
+
+
+}

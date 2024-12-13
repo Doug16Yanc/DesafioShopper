@@ -20,11 +20,12 @@ import androidx.compose.ui.unit.sp
 import com.example.desafioshopper.R
 import com.example.desafioshopper.model.Travel
 
+
 @Composable
 fun ListTravels(travels : List<Travel>) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        modifier = Modifier.height(720.dp)
+        modifier = Modifier.height(200.dp)
             .padding(start = 10.dp, end = 10.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -32,16 +33,16 @@ fun ListTravels(travels : List<Travel>) {
             row -> Row(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 TravelsScreen(travels, row)
-        }
+            }
         }
     }
 }
 
+
 @Composable
-fun TravelsScreen(travels : List<Travel>, pos : Int) {
+fun TravelsScreen(travels: List<Travel>, pos: Int) {
     Column(
-        modifier = Modifier.padding(12.dp)
-            .height(100.dp)
+        modifier = Modifier.padding(12.dp).height(100.dp)
     ) {
         Text(
             text = stringResource(R.string.travel_detail),
@@ -55,11 +56,6 @@ fun TravelsScreen(travels : List<Travel>, pos : Int) {
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Row {
-                Text(
-                    text = travels[pos].dateTime.toString(),
-                    color = Color.DarkGray,
-                    fontSize = 16.sp
-                )
                 Text(
                     text = travels[pos].dateTime.toString(),
                     color = Color.DarkGray,
@@ -94,13 +90,6 @@ fun TravelsScreen(travels : List<Travel>, pos : Int) {
                     )
                 }
                 travels[pos].duration?.let {
-                    Text(
-                        text = it.toString(),
-                        color = Color.DarkGray,
-                        fontSize = 16.sp
-                    )
-                }
-                travels[pos].value?.let {
                     Text(
                         text = it.toString(),
                         color = Color.DarkGray,
